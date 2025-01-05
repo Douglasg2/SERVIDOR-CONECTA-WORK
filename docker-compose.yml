@@ -1,0 +1,35 @@
+version: '3.1'
+services:
+  web:
+    image: httpd:2.4
+    container_name: web_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./www:/usr/local/apache2/htdocs/
+      - ./wait-for-it:/wait-for-it  # Montando o script corretamente
+    depends_on:
+      - db
+    command: ["/wait-for-it/wait-for-it.sh", "db:3306", "--", "httpd-foreground"]  # Use httpd-foreground
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+
+  db:
+    image: mysql
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: conecta_work
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - DEBIAN_FRONTEND=noninteractive
+
+volumes:
+  db_data:
