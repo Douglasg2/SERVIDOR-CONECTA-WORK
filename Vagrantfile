@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "web_server" do |web|
     web.vm.box = "ubuntu/focal64"
     web.vm.network "private_network", type: "dhcp"
-    web.vm.provision "shell", path: "vagrant/web_provision.sh"
+    web.vm.provision "shell", path: "provision/web_provision.sh"
   end
 
   # Definição da VM para o servidor de banco de dados
