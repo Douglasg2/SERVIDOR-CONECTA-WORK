@@ -7,15 +7,15 @@ services:
       - "80:80"
     volumes:
       - ./www:/usr/local/apache2/htdocs/
-      - ./wait-for-it:/wait-for-it  # Montando o script corretamente
+      - ./wait-for-it:/wait-for-it
     depends_on:
       - db
-    command: ["/wait-for-it/wait-for-it.sh", "db:3306", "--", "httpd-foreground"]  # Use httpd-foreground
+    command: ["/wait-for-it/wait-for-it.sh", "db:3306", "--", "httpd-foreground"]
     environment:
       - DEBIAN_FRONTEND=noninteractive
 
   db:
-    image: mysql
+    image: mysql:5.7
     container_name: mysql_server
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword

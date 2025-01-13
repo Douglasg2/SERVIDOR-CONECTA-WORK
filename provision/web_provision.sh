@@ -22,7 +22,7 @@ ufw default allow outgoing
 ufw allow ssh
 ufw allow http
 ufw allow https
-ufw enable
+ufw --force enable
 
 ## Instalando fail2ban para proteger contra ataques de força bruta
 apt-get install -y fail2ban
@@ -36,8 +36,13 @@ apt-get install -y unattended-upgrades
 dpkg-reconfigure --priority=low unattended-upgrades
 
 # Iniciando os contêineres
-cd /vagrant
-docker-compose up -d
+cd /vagrant  # Acessa a pasta principal do projeto
+if [ -f docker-compose.yml ]; then
+    docker-compose up -d
+else
+    echo "Arquivo docker-compose.yml não encontrado em /vagrant. Abortando."
+    exit 1
+fi
 
 # Finalizando provisionamento
 echo "Provisionamento completo"
